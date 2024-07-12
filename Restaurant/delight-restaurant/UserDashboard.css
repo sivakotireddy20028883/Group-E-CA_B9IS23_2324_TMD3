@@ -1,0 +1,36 @@
+.user-dashboard {
+    text-align: center;
+    padding: 20px;
+}
+
+.user-dashboard nav {
+    display: flex;
+    justify-content: center;
+}
+
+.user-dashboard nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Add gap between list items */
+}
+
+.user-dashboard nav ul li {
+    margin: 0 10px;
+}
+
+.user-dashboard nav ul li a {
+    text-decoration: none;
+    color: #007BFF;
+    text-align: center;
+}
+
+.user-dashboard nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.user-dashboard nav ul li button{
+    width: 75px;
+}
