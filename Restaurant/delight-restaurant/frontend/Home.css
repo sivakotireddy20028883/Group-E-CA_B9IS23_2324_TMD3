@@ -1,0 +1,30 @@
+.home-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.home-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.home-buttons button {
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: grey;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.home-buttons button:hover {
+    background-color: grey;
+    color: white;
+}
+
+.component-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
