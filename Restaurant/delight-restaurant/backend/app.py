@@ -49,17 +49,6 @@
             return f(*args, **kwargs)
         return decorated_function
 
-    # Route to register a new user
-    from flask import Flask, request, jsonify
-    from flask_sqlalchemy import SQLAlchemy
-    from flask_cors import CORS
-
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/dbname'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db = SQLAlchemy(app)
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
-
     class User(db.Model):
         user_id = db.Column(db.Integer, primary_key=True)
         username = db.Column(db.String(50), unique=True, nullable=False)
