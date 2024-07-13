@@ -1,0 +1,28 @@
+.reservation-manager {
+    padding: 20px;
+}
+
+.reservation-list {
+    margin-top: 20px;
+}
+
+.sort-options {
+    margin-bottom: 10px;
+}
+
+.sort-options button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.reservation-item {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
