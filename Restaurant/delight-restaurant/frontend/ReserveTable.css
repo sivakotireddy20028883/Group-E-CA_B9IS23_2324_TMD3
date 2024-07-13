@@ -1,0 +1,62 @@
+.reserve-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.reserve-table-container {
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reserve-table h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reserve-table-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.reserve-table-form label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.reserve-table-form input[type="text"],
+.reserve-table-form input[type="number"],
+.reserve-table-form input[type="date"],
+.reserve-table-form input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.reserve-table-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100px;
+}
+
+.reserve-table-form button:hover {
+    background-color: #45a049;
+}
+
+.reserve-table-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
