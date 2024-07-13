@@ -144,3 +144,79 @@ def get_menu():
         'price': str(item.price),
         'availability': item.availability
     } for item in menu_items])
+
+@app.route('/api/user/menu', methods=['GET'])
+def get_userSmenu():
+    menu_items = MenuItem.query.all()
+    return jsonify([{
+        'id': item.id,
+        'name': item.name,
+        'description': item.description,
+        'price': str(item.price),
+        'availability': item.availability
+    } for item in menu_items])
+# Fetch all menu items
+@app.route('/api/admin/menu', methods=['GET'])
+def get_adminmenu_items():
+    try:
+        menu_items = MenuItem.query.all()
+        serialized_menu = [item.serialize() for item in menu_items]
+        return jsonify(serialized_menu), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+# Add a new menu item
+@app.route('/api/admin/menu', methods=['POST'])
+def add_menu_item():
+    try:
+        new_item_data = request.json
+        new_item = MenuItem(
+            name=new_item_data['name'],
+            description=new_item_data.get('description', ''),
+            price=float(new_item_data['price']),
+            availability=new_item_data.get('availability', True)
+        )
+        db.session.add(new_item)
+        db.session.commit()
+        return jsonify({'message': 'Menu item added successfully'}), 201
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'error': 'Menu item already exists'}), 400
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+# Update an existing menu item
+@app.route('/api/admin/menu/<int:item_id>', methods=['PUT'])
+def update_menu_item(item_id):
+    try:
+        item = MenuItem.query.get(item_id)
+        if not item:
+            return jsonify({'error': 'Menu item not found'}), 404
+
+        data = request.json
+        item.name = data.get('name', item.name)
+        item.description = data.get('description', item.description)
+        item.price = float(data.get('price', item.price))
+        item.availability = data.get('availability', item.availability)  # Ensure the key is 'availability'
+
+        db.session.commit()
+        return jsonify({'message': 'Menu item updated successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+# Delete a menu item
+@app.route('/api/admin/menu/<int:item_id>', methods=['DELETE'])
+def delete_menu_item(item_id):
+    try:
+        item = MenuItem.query.get(item_id)
+        if not item:
+            return jsonify({'error': 'Menu item not found'}), 404
+
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({'message': 'Menu item deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
