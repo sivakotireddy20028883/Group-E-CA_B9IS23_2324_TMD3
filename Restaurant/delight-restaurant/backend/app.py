@@ -321,20 +321,6 @@
             print(f"Error: {e}")
             return jsonify({'error': 'Failed to fetch orders'}), 500
 
-    @app.route('/api/customers', methods=['GET'])
-    def get_customers():
-        try:
-            customers = Customer.query.all()
-            serialized_customers = [{
-                'id': customer.id,
-                'name': customer.name,
-                'contact_details': customer.contact_details,
-                'order_history': customer.order_history
-            } for customer in customers]
-            return jsonify(serialized_customers), 200
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
-
     # Route for logging out
     @app.route('/api/logout', methods=['POST'])
     def logout():
