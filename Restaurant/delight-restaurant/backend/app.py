@@ -34,7 +34,7 @@ class User(db.Model):
         self.role = role
         self.email = email
 
-# Utility function to check admin role
+
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -78,24 +78,23 @@ class Order(db.Model):
             'order_items' : self.order_items
         }
 
-class OrderItem(db.Model):
-    __tablename__ = 'order_items'
+class OrderItem(db.model):
+    __tablename__ ='order_items'
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    item_total = db.Column(db.Numeric(10, 2), nullable=False)  # Ensure item_total is included
+    order_id = db.Column(db.Integer,db.ForeignKey('orders.id'),nullable=False)
+    menu_item_id = db.Column(db.Integer,db.ForeignKey('menu.id),nullable=False)
+    quantity = db.Column(db.Integer,nullable=False)
+    item_total = db.Column(db.Numeric(10,2),nulable=False)
 
     def serialize(self):
-        return {
-            'id': self.id,
-            'order_id': self.order_id,
-            'menu_item_id': self.menu_item_id,
-            'quantity': self.quantity,
-            'item_total': self.item_total
-        }
-        
-# Route to register a new user
+        return{
+            'id' : self.id,
+            'oredr_id':self.order_id,
+            'menu_item_id':self.menu_item_id,
+            'quantity' : self.quantity,
+            'item_total' : self.item_total
+         }
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -129,7 +128,7 @@ def login():
     else :
         return jsonify ({'message':'Invalid username or password'})
 
-# Route to get all menu items
+
 @app.route('/api/menu', methods=['GET'])
 def get_menu():
     menu_items = MenuItem.query.all()
@@ -151,7 +150,7 @@ def get_userSmenu():
         'price': str(item.price),
         'availability': item.availability
     } for item in menu_items])
-# Fetch all menu items
+
 @app.route('/api/admin/menu', methods=['GET'])
 def get_adminmenu_items():
     try:
@@ -161,7 +160,7 @@ def get_adminmenu_items():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-# Add a new menu item
+
 @app.route('/api/admin/menu', methods=['POST'])
 def add_menu_item():
     try:
@@ -182,7 +181,7 @@ def add_menu_item():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# Update an existing menu item
+
 @app.route('/api/admin/menu/<int:item_id>', methods=['PUT'])
 def update_menu_item(item_id):
     try:
@@ -202,22 +201,20 @@ def update_menu_item(item_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# Delete a menu item
-@app.route('/api/admin/menu/<int:item_id>', methods=['DELETE'])
+@app.route('/api/admin/menu/<int:item_id>',methods=['DELETE'])
 def delete_menu_item(item_id):
     try:
         item = MenuItem.query.get(item_id)
         if not item:
-            return jsonify({'error': 'Menu item not found'}), 404
-
+            return jsonify({'error':'menu item not found'}),404
         db.session.delete(item)
         db.session.commit()
-        return jsonify({'message': 'Menu item deleted successfully'}), 200
+        return jsonify({'message':'menu item deleted successfuly'}),200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error':str(e)}),500
 
-# Define the ContactMessage model
+
 class ContactMessage(db.Model):
     __tablename__ = 'contact_messages'
 
@@ -252,7 +249,7 @@ class Reservation (db.Model):
             'people':self.people
         }
         
-# Route to make a reservation
+
 @app.route('/api/reservation', methods=['POST'])
 def make_reservation():
     data = request.get_json()
@@ -261,13 +258,13 @@ def make_reservation():
     name = data.get('name')
     date = data.get('date')
     time = data.get('time')
-    people = data.get('numberOfGuests')  # Ensure this matches frontend field
+    people = data.get('numberOfGuests')  
 
-    # Validate data (add more specific validation if needed)
+    
     if not all([name, date, time, people]):
         return jsonify({'error': 'Missing data fields'}), 400
 
-    # Create new reservation object
+    
     new_reservation = Reservation(
         name=name,
         date=date,
@@ -288,13 +285,13 @@ def make_reservation():
 @app.route('/api/admin/reservations', methods=['GET'])
 def get_reservations():
     try:
-        sort_by = request.args.get('sort_by', 'date')  # Default sort by date
-        order = request.args.get('order', 'asc')  # Default order ascending
+        sort_by = request.args.get('sort_by', 'date')  
+        order = request.args.get('order', 'asc')  
 
         if sort_by == 'date':
             sort_column = Reservation.date
         elif sort_by == 'booking_date':
-            sort_column = Reservation.id  # Assuming 'booking_date' is based on the id field, change this to your actual field
+            sort_column = Reservation.id  
         else:
             sort_column = Reservation.id
 
@@ -322,12 +319,12 @@ def get_orders():
         } for item in order.order_items]
     } for order in orders])
 
-# Route to place an order
+
 @app.route('/api/orders', methods=['POST'])
 def place_order():
     try:
         data = request.get_json()
-        print("Received data:", data)  # Log the received data
+        print("Received data:", data)  
 
         user_id = data['user_id']
         items = data['items']
@@ -356,14 +353,14 @@ def place_order():
         print("Error:", str(e))  # Log the error message
         return jsonify({'error': str(e)}), 500
 
-# Route for logging out
+
 @app.route('/api/logout', methods=['POST'])
 def logout():
     session.pop('username', None)
     session.pop('role', None)
     return jsonify({'message': 'Logged out successfully'}), 200
 
-# CORS handling and menu item management routes
+
 @app.route('/api/admin/menu', methods=['POST'])
 @jwt_required()
 @admin_required
@@ -391,6 +388,6 @@ def add_adminmenu_item():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# Run the Flask app
+
 if __name__ == '__main__':
     app.run(debug=True)
