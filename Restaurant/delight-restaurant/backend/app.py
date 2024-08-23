@@ -118,20 +118,16 @@ def register():
         db.session.rollback()
         return jsonify({'message': f'Registration failed: {str(e)}'}), 500
 
-# Route to login
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/login', methods = ['POST'])
 def login():
     data = request.get_json()
     username = data['username']
     password = data['password']
-
     user = User.query.filter_by(username=username,password=password).first()
-
-    #if user and check_password_hash(user.password, password):
-    if user:
-        return jsonify({'message': 'Login successful', 'role': user.role})
-    else:
-        return jsonify({'message': 'Invalid username or password'}), 401
+    if user :
+        return jsonify ({'message':'Login Successful','role':user.role})
+    else :
+        return jsonify ({'message':'Invalid username or password'})
 
 # Route to get all menu items
 @app.route('/api/menu', methods=['GET'])
@@ -238,25 +234,24 @@ class ContactMessage(db.Model):
             'message': self.message,
         }
 
-# Define the Reservation model
-class Reservation(db.Model):
-    __tablename__ = 'reservations'
+class Reservation (db.Model):
+    __tablename__='reservations'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.String(50), nullable=False)
-    time = db.Column(db.String(50), nullable=False)
-    people = db.Column(db.Integer, nullable=False)
+    id = db.colmun(db.Integer,primary_key=True)
+    name = db.colmun(db.String(100),nullable=False)
+    date = db.colmun(db.String(50),nullable=False)
+    time = db.colmun(db.String(50),nullable=False)
+    people = db.colmun(db.Integer,nullable=False)
 
     def serialize(self):
         return {
-            'id': self.id,
-            'name': self.name,
-            'date': self.date,
-            'time': str(self.time),
-            'people': self.people
+            'id':self.id,
+            'name':self.name,
+            'date':self.date,
+            'time':str(self.time),
+            'people':self.people
         }
-
+        
 # Route to make a reservation
 @app.route('/api/reservation', methods=['POST'])
 def make_reservation():
